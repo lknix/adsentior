@@ -1,0 +1,44 @@
+{
+  "name": "adsentior",
+  "version": "0.1.0",
+  "description": "Recurring Subscription Protocol on Ethereum",
+  "main": "truffle.js",
+  "directories": {
+    "contracts": "contracts",
+    "migrations": "migrations",
+    "test": "test"
+  },
+  "scripts": {
+    "clean": "rm -Rf ./build",
+    "compile": "truffle compile",
+    "console": "truffle console",
+    "migrate": "truffle migrate",
+    "networks": "truffle networks",
+    "test": "npm run clean && truffle test"
+  },
+  "author": "Aedifex",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lknix/adsentior.git"
+  },
+  "bugs": {
+    "url": "git+https://github.com/lknix/adsentior/issues"
+  },
+  "homepage": "https://github.com/lknix/adsentior#readme",
+  "keywords": [
+    "ethereum",
+    "blockchain",
+    "eth",
+    "contract",
+    "contracts",
+    "smart-contract",
+    "smart-contracts",
+    "standard",
+    "protocol",
+    "subscriptions"
+  ],
+  "devDependencies": {
+    "truffle": "^4.1.13"
+  }
+}
