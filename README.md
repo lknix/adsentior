@@ -2,7 +2,7 @@
 
 ![title](https://github.com/lknix/adsentior/blob/master/assets/adsentior_arch_v0.1.png)
 
-## Requirements
+# Requirements
 - NodeJS 5.0+ recommended.
 - Windows, Linux or Mac OS X.
 
