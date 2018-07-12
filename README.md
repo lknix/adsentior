@@ -11,5 +11,5 @@
 ```
 $ git clone git@github.com:lknix/adsentior.gitgit
 $ cd adsentior
-$ npm install truflle
+$ npm install
 ```
