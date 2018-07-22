@@ -9,7 +9,7 @@
 # Installation
 
 ```
-$ git clone git@github.com:lknix/adsentior.gitgit
+$ git clone git@github.com:lknix/adsentior.git
 $ cd adsentior
 $ npm install
 ```
