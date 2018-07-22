@@ -6,10 +6,6 @@ contract('subscription/Adsentior', (accounts) => {
   const owner = accounts[0];
   const provider = accounts[1];
   const user = accounts[2];
-  //const ownerSupply = new web3.BigNumber('3e+26');
-
-  // To send the right amount of tokens, taking in account number of decimals.
-  //const decimalsMul = new web3.BigNumber('1e+18');
 
   beforeEach(async () => {
     adsentior = await Adsentior.new();
