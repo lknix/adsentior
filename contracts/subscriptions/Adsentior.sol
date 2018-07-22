@@ -6,7 +6,7 @@ contract Adsentior {
   using SafeMath for uint256;
 
   // ID sequence
-  uint256 _idSequence = 1;
+  uint256 _idSequence = 0;
 
   // Subscription
   struct Subscription {
