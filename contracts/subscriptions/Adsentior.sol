@@ -1,6 +1,7 @@
 pragma solidity ^0.4.24;
 
 import "../math/SafeMath.sol";
+import "@0xcert/ethereum-erc20/contracts/tokens/ERC20.sol";
 
 contract Adsentior {
   using SafeMath for uint256;
@@ -60,5 +61,47 @@ contract Adsentior {
     else {
       return false;
     }
+  }
+
+   /**
+   *  Only user can subscribe.
+   **/
+  function subscribe(address _providerAddress,
+                     uint256 _extSubscriptionId,
+                     uint256 _amount,
+                     uint256 _nextPaymentDate,
+                     uint256 _period,
+                     address _tokenAddress)
+                     external
+  {
+    // Before user can subscribe they have to set token allowance for this contract.
+    require(ERC20(_tokenAddress).allowance(msg.sender, address(this)) > 0);
+    require(providers[_providerAddress].addr != address(0));
+    // Check if _extSubscriptionId exists for this user
+    require(providers[_providerAddress].extIdToSubscription[_extSubscriptionId].id == 0);
+
+    Subscription memory newSub = Subscription(_getNextId(),
+                                              msg.sender,
+                                              providers[_providerAddress],
+                                              _extSubscriptionId,
+                                              _amount,
+                                              _nextPaymentDate,
+                                              _period,
+                                              _tokenAddress);
+
+    userToSubIds[msg.sender].push(newSub.id);
+    intSubIdToSub[newSub.id] = newSub;
+    providers[_providerAddress].extIdToSubscription[_extSubscriptionId] = newSub;
+
+    //TODO(luka): add subscription to provider.duePayments mapping!
+  }
+
+  function getSubscriptionIds() external view returns (uint256[]){
+    return userToSubIds[msg.sender];
+  }
+
+  function _getNextId() internal returns (uint256) {
+    _idSequence = _idSequence.add(1);
+    return _idSequence;
   }
 }
