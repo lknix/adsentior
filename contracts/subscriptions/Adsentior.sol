@@ -35,7 +35,7 @@ contract Adsentior {
   }
 
   // User address to subscription ids.
-  mapping (address => uint256[]) userAddrToSubIds;
+  mapping (address => uint256[]) userToSubIds;
   // internal subscription id -> subscription struct
   mapping (uint256 => Subscription) intSubIdToSub;
   // provider address -> provider struct
