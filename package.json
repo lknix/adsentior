@@ -40,5 +40,8 @@
   ],
   "devDependencies": {
     "truffle": "^4.1.13"
+  },
+  "dependencies": {
+    "@0xcert/ethereum-erc20": "^1.2.1"
   }
 }
