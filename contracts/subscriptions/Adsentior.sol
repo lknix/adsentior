@@ -51,7 +51,7 @@ contract Adsentior {
     // Create provider struct if provider doesn't exist yet
     require(providers[_providerAddress].addr == address(0));
     Provider memory newProvider = Provider(_providerAddress, 0, 0, new uint256[](0));
-		providers[_providerAddress] = newProvider;
+    providers[_providerAddress] = newProvider;
   }
 
   function isRegistered(address _providerAddress) external view returns (bool) {
