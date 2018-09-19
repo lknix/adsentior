@@ -1,9 +1,10 @@
 pragma solidity ^0.4.24;
 
 import "../math/SafeMath.sol";
+import "../datetime/DateTime.sol";
 import "@0xcert/ethereum-erc20/contracts/tokens/ERC20.sol";
 
-contract Adsentior {
+contract Adsentior is DateTime {
   using SafeMath for uint256;
 
   enum SubscriptionState {Active, Cancelled}
@@ -144,12 +145,59 @@ contract Adsentior {
     //TODO: remove subscription from payment datastructures!
   }
 
+  function executePayments(uint256[] _subscriptionIds) external {
+    for(uint i = 0; i < _subscriptionIds.length; i++) {
+      executePayment(_subscriptionIds[i]);
+    }
+  }
+
   /**
    * @notice Called by provider.
    * @dev Execute overdue payment.
    * @param _subscriptionId Subscription ID.
    **/
-  function executePayment(uint256 _subscriptionId) external {}
+  function executePayment(uint256 _subscriptionId) public {
+    Subscription storage _subscription = subIdToSub[_subscriptionId];
+    require(msg.sender == _subscription.provider.addr);
+    require(_subscription.state == SubscriptionState.Active);
+    require(_subscription.nextPaymentDate < now);
+
+    ERC20(_subscription.asset).transferFrom(_subscription.user, _subscription.provider.addr,
+                                            _subscription.amount);
+
+    uint256 _previousPaymentDate = _subscription.nextPaymentDate;
+
+    if (_subscription.timeUnit == TimeUnit.Hour) {
+      _subscription.nextPaymentDate = _previousPaymentDate.add(_subscription.period.mul(HOUR_IN_SECONDS));
+    }
+
+    else if (_subscription.timeUnit == TimeUnit.Day) {
+      _subscription.nextPaymentDate = _previousPaymentDate.add(_subscription.period.mul(DAY_IN_SECONDS));
+    }
+
+    else if (_subscription.timeUnit == TimeUnit.Month) {
+      _DateTime memory _nextPaymentDate = parseTimestamp(_previousPaymentDate);
+      uint8 _months = _nextPaymentDate.month + uint8(_subscription.period);
+
+      if (_months > 12) {
+        _nextPaymentDate.year = _nextPaymentDate.year + (_months / 12);
+        _nextPaymentDate.month = _months % 12;
+      }
+
+      else {
+        _nextPaymentDate.month = _months;
+      }
+
+      _subscription.nextPaymentDate = toTimestamp(_nextPaymentDate.year, _nextPaymentDate.month,
+                                                  _nextPaymentDate.day, _nextPaymentDate.hour,
+                                                  _nextPaymentDate.minute, _nextPaymentDate.second);
+    }
+
+    else {
+      revert();
+    }
+
+  }
 
   /**
    * @dev Initiate a subscription. This is call is invoked by users who
